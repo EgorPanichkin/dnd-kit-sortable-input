@@ -4,7 +4,7 @@ import { Cross } from "../../icons/Cross"
 import { ISortPhoto } from "../../types/types"
 
 export const SortablePhoto = ({ handleRemove, ...props }: ISortPhoto) => {
-  const sortable = useSortable({ id: props.url })
+  const sortable = useSortable({ id: props.url, animateLayoutChanges: () => false })
   const { attributes, listeners, setNodeRef, transform, transition } = sortable
 
   const style = {

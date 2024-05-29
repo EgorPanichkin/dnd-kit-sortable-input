@@ -1,24 +1,33 @@
 import { useState } from "react"
 import style from "./Gallery.module.scss"
-import { DndContext, closestCenter, MouseSensor, TouchSensor, DragOverlay, useSensor, useSensors } from "@dnd-kit/core"
+import {
+  DndContext,
+  closestCenter,
+  MouseSensor,
+  TouchSensor,
+  DragOverlay,
+  useSensor,
+  useSensors,
+  UniqueIdentifier,
+} from "@dnd-kit/core"
 import { SortableContext, rectSwappingStrategy, arraySwap } from "@dnd-kit/sortable"
 
 import { SortablePhoto } from "../SortablePhoto/SortablePhoto"
 import { Photo } from "../Photo/Photo"
-import { IUploadGallary } from "../../types/types"
+import { DragEndHandler, DragStartHandler, IUploadGallary } from "../../types/types"
 
 export const Gallery = ({ items, setItems }: IUploadGallary) => {
-  const [activeId, setActiveId] = useState<string | null>(null)
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null)
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor))
 
-  const handleDragStart = (event: any): void => {
+  const handleDragStart: DragStartHandler = (event) => {
     setActiveId(event.active.id)
   }
 
-  const handleDragEnd = (event: any): void => {
+  const handleDragEnd: DragEndHandler = (event) => {
     const { active, over } = event
 
-    if (active.id !== over.id) {
+    if (!!over?.id && active.id !== over.id) {
       setItems((items) => {
         const oldIndex = items.indexOf(active.id)
         const newIndex = items.indexOf(over.id)
